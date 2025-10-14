@@ -9,7 +9,7 @@ services:
       - SERILOG__WRITETO__2__NAME=Seq
       - SERILOG__WRITETO__2__ARGS__SERVERURL=http://seq:5341
       - HealthChecksUI__HealthChecks__0__Name=D34 Cleaners API
-      - HealthChecksUI__HealthChecks__0__Uri=http://api:8080/api/healthcheck      
+      - HealthChecksUI__HealthChecks__0__Uri=http://api:8080/healthcheck      
       # Se usar API Key no Seq, descomente a linha abaixo e crie a chave no Seq UI
       # - SERILOG__WRITETO__2__ARGS__APIKEY=SEU_API_KEY
     expose:
