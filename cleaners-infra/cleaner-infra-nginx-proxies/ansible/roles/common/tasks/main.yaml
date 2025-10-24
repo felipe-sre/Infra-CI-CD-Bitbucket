@@ -30,7 +30,7 @@
   ansible.posix.authorized_key:
     user: "{{ app_user }}"
     state: present
-    key: "{{ lookup('file', '~/.ssh/authorized_keys') }}"
+    key: "{{ lookup('file', '~/.ssh/authorized_keys.pub') }}" # Adicione o caminho para a sua chave pública.
     exclusive: no
 
 - name: 2.4 - Configurar sudo NOPASSWD para o usuário {{ app_user }}
