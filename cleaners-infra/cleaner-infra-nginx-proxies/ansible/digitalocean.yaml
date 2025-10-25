@@ -11,18 +11,7 @@ attributes:
   - tags 
 
 filters:
-  - has_tag: webservers  
-
-# keyed_groups:
-#   - key: tags
-#     separator: ''
-#     prefix: ''
-
-groups:
-  webservers: "'webservers' in do_tags"
-
-# compose:
-#   ansible_host: do_networks.v4[0].ip_address
+  - name: app-server
 
 compose:
   ansible_host: do_networks.v4 | selectattr('type','eq','public') | map(attribute='ip_address') | first

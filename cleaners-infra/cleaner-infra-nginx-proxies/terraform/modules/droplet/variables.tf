@@ -1,3 +1,4 @@
+/*
 variable "droplet_count" {
   description = "Número de Droplets a serem criados."
   type        = number
@@ -23,3 +24,4 @@ variable "ssh_key_name" {
   description = "O nome da chave SSH cadastrada na DigitalOcean."
   type        = string
 }
+*/

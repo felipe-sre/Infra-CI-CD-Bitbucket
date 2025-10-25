@@ -1,13 +1,13 @@
 - name: Configurar Droplet da Aplicacao
-  hosts: webservers
+  hosts: app-server
   become: true
   
   vars:
-    app_user: devops
+    app_user: darlan
 
-    certbot_email: "lucasoliveira@d34.com.br"
+    certbot_email: "contato@d34.com.br"
 
-    domain: "d34.com.br"
+    domain: "damasio34.com.br"
     subdomains: ["geo", "short"]
 
     app_internal_host: "127.0.0.1"

@@ -1,3 +1,4 @@
+/*
 terraform {
   required_providers {
     digitalocean = {
@@ -20,3 +21,4 @@ resource "digitalocean_droplet" "web_node" {
 data "digitalocean_ssh_key" "main_ssh_key" {
   name = var.ssh_key_name
 }
+*/

@@ -1,9 +1,7 @@
 variable "droplet_count" { type = number }
 
-
 variable "domain_name" { 
     type = string 
-    default = "d34.com.br"
 }
 
 variable "subdomains" {
@@ -14,7 +12,6 @@ variable "subdomains" {
 
 variable "ssh_key_name" { 
     type = string 
-
 }
 
 variable "environment" {
