@@ -41,13 +41,25 @@ pipelines:
             - export ANSIBLE_HOST_KEY_CHECKING=False 
             - pip install ansible==9.4.0 docker==6.1.3 python-digitalocean
             - ansible-galaxy collection install -r cleaners-infra/cleaner-infra-nginx-proxies/ansible/requirements.yml
+            - ls -ld .
+            - |
+              echo "--- Verificando DO_API_TOKEN ---"
+              if [ -z "$DO_API_TOKEN" ]; then
+                echo "ERRO: A variável DO_API_TOKEN não está definida no Bitbucket Secrets."
+                echo "O pipeline será interrompido."
+                exit 1
+              else
+                echo "DO_API_TOKEN está presente (OK)."
+              fi
+              echo "--- Verificação de Token concluída ---"
             - export DO_TOKEN=$DO_API_TOKEN
             - export FULL_IMAGE_PATH="${DOCKER_REPO}/${APP_NAME}:${IMAGE_TAG}"
+            - export ANSIBLE_ROLES_PATH=./cleaners-infra/cleaner-infra-nginx-proxies/ansible/roles
             - cd cleaners-infra/cleaner-infra-nginx-proxies/ansible
-            - ansible-playbook
-                playbooks/deploy_app.yaml 
-                -i digitalocean.yaml 
-                --limit app-server 
+            - ansible-playbook \
+                playbooks/deploy_app.yaml \
+                -i digitalocean.yaml \
+                --limit app-server \
                 --extra-vars "app_to_deploy=${APP_NAME} full_image_path=${FULL_IMAGE_PATH} docker_username=$DOCKER_USERNAME docker_password=$DOCKER_PASSWORD"
     
     reconfigure-nginx:
