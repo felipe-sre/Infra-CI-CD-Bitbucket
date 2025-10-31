@@ -38,8 +38,10 @@ definitions:
             source venv/bin/activate                      
             pip install ansible==9.4.0 docker==6.1.3 python-digitalocean                      
             ansible-galaxy collection install -r cleaners-infra/cleaner-infra-nginx-proxies/ansible/requirements.yml                      
+            echo "--- Configurando Chave SSH ---"
             mkdir -p ~/.ssh
-            echo "$DO_SSH_KEY" > ~/.ssh/ansible_ssh_key && chmod 600 ~/.ssh/ansible_ssh_key                     
+            echo "$DO_SSH_KEY" | base64 -d > ~/.ssh/ansible_ssh_key && chmod 600 ~/.ssh/ansible_ssh_key
+            echo "Chave SSH configurada."                     
             export DO_TOKEN=$DO_API_TOKEN
             cd cleaners-infra/cleaner-infra-nginx-proxies/ansible
             chmod 755 .            
@@ -67,8 +69,10 @@ definitions:
             source venv/bin/activate
             pip install ansible==9.4.0 docker==6.1.3 python-digitalocean
             ansible-galaxy collection install -r cleaners-infra/cleaner-infra-nginx-proxies/ansible/requirements.yml
+            echo "--- Configurando Chave SSH ---"
             mkdir -p ~/.ssh
-            echo "$DO_SSH_KEY" > ~/.ssh/ansible_ssh_key && chmod 600 ~/.ssh/ansible_ssh_key
+            echo "$DO_SSH_KEY" | base64 -d > ~/.ssh/ansible_ssh_key && chmod 600 ~/.ssh/ansible_ssh_key
+            echo "Chave SSH configurada."
             export DO_TOKEN=$DO_API_TOKEN
             export FULL_IMAGE_PATH="${DOCKER_REPO}/${APP_NAME}:${IMAGE_TAG}"
             cd cleaners-infra/cleaner-infra-nginx-proxies/ansible
