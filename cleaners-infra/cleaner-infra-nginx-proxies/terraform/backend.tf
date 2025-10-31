@@ -1,8 +1,6 @@
 terraform {
    backend "s3" {
-     endpoint                    = {
-       s3 = "https://nyc3.digitaloceanspaces.com"
-     }
+     endpoint                    = "https://nyc3.digitaloceanspaces.com"
      region                      = "us-east-1"
      bucket                      = "cleaner-backend"
      key                         = "cleaner-backend/default/terraform.tfstate"
