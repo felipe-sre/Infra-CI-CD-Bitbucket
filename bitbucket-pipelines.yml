@@ -42,9 +42,9 @@ definitions:
             echo "$DO_SSH_KEY" > ~/.ssh/ansible_ssh_key && chmod 600 ~/.ssh/ansible_ssh_key                     
             export DO_TOKEN=$DO_API_TOKEN
             cd cleaners-infra/cleaner-infra-nginx-proxies/ansible            
-            echo "--- Executando Playbook de Configuração (configure_host.yaml) ---"
+            echo "--- Executando Playbook de Configuração (playbook.yml) ---"
             ansible-playbook \
-              playbooks/configure_host.yaml \
+              playbooks/playbook.yml \
               -i digitalocean.yaml \
               --limit app-server \
               --user root \
