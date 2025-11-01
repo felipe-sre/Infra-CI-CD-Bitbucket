@@ -87,9 +87,14 @@ definitions:
               --extra-vars "app_to_deploy=${APP_NAME} full_image_path=${FULL_IMAGE_PATH} docker_username=$DOCKER_USERNAME docker_password=$DOCKER_PASSWORD"
 
 pipelines:
-  # Pipeline Completo (Manual)
   custom:
-    staging-deploy:
+    staging-deploy:      
+      - variables:
+        - name: DOMAIN_NAME
+          default: "damasio34.com.br"
+        - name: CERTBOT_EMAIL
+          default: "contato@d34.com.br"
+                
       - step: *plan
       - step: *apply
       - step: *reconfigure
