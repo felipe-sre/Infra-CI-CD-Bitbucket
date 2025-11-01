@@ -55,8 +55,9 @@
     certbot --nginx -n --agree-tos 
     -m {{ certbot_email }} 
     {% for sub in subdomains %}-d {{ sub }}.{{ domain }} {% endfor %}
-  args:
-    creates: /etc/letsencrypt/live/{{ subdomains[0] }}.{{ domain }}/fullchain.pem
+    --staging
+  # args: # Remover comentarios apos a fase de testes.
+  #   creates: /etc/letsencrypt/live/{{ subdomains[0] }}.{{ domain }}/fullchain.pem
 
 - name: "Testar e reiniciar Nginx para garantir a configuração HTTP"
   ansible.builtin.service:
