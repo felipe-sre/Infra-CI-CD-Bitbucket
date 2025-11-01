@@ -14,12 +14,12 @@
       when: current_app == {} or current_app.name is not defined
 
     - name: "Login no container registry da DigitalOcean"
-      community.docker.docker_login:
-        registry_url: registry.digitalocean.com
-        username: "{{ lookup('env', 'DOCKER_USERNAME') }}"
-        password: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
-      environment:
-        DOCKER_HOST: unix:///var/run/docker.sock 
+      ansible.builtin.command: |
+        docker login registry.digitalocean.com \
+        --username {{ lookup('env', 'DOCKER_USERNAME') }} \
+        --password-stdin
+      args:
+        stdin: "{{ lookup('env', 'DOCKER_PASSWORD') }}" 
 
     - name: "Parar contêiner antigo para liberar a porta"
       community.docker.docker_container:
