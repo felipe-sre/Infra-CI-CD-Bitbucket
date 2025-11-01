@@ -84,8 +84,11 @@ definitions:
               --limit app-server \
               --user root \
               --private-key ~/.ssh/ansible_ssh_key \
-              --extra-vars "@$BITBUCKET_CLONE_DIR/cleaners-infra/apps.yaml"
-              --extra-vars "app_to_deploy=${APP_NAME} full_image_path=${FULL_IMAGE_PATH} docker_username=$DOCKER_USERNAME docker_password=$DOCKER_PASSWORD"
+              --extra-vars "@$BITBUCKET_CLONE_DIR/cleaners-infra/apps.yaml" \
+              --extra-vars "app_to_deploy=${APP_NAME}" \
+              --extra-vars "full_image_path=${FULL_IMAGE_PATH}" \
+              --extra-vars "docker_username=$DOCKER_USERNAME" \
+              --extra-vars "docker_password=$DOCKER_PASSWORD"
             echo "--- Ansible Playbook Concluído ---"  
 
 pipelines:
