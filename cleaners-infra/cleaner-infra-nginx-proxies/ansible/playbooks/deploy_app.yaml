@@ -3,9 +3,6 @@
   gather_facts: false
   become: true
 
-  vars:
-    ansible_docker_host: "unix:///var/run/docker.sock"
-
   tasks:
     - name: "Definir dados da aplicação a ser implantada"
       ansible.builtin.set_fact:
@@ -21,17 +18,23 @@
         registry_url: registry.digitalocean.com
         username: "{{ lookup('env', 'DOCKER_USERNAME') }}"
         password: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+      environment:
+        DOCKER_HOST: unix:///var/run/docker.sock 
 
     - name: "Parar contêiner antigo para liberar a porta"
       community.docker.docker_container:
         name: "{{ current_app.name }}"
         state: absent
       ignore_errors: true
+      environment:
+        DOCKER_HOST: unix:///var/run/docker.sock
 
     - name: "Puxar a nova imagem do registry"
       community.docker.docker_image:
         name: "{{ lookup('env', 'FULL_IMAGE_PATH') }}"
         source: pull
+      environment:
+        DOCKER_HOST: unix:///var/run/docker.sock
 
     - name: "Rodar o novo contêiner"
       community.docker.docker_container:
@@ -41,3 +44,5 @@
         restart_policy: always
         ports:
           - "{{ current_app.host_port }}:{{ current_app.internal_port }}"
+      environment:
+        DOCKER_HOST: unix:///var/run/docker.sock    
