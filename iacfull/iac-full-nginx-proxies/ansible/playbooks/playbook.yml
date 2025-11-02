@@ -3,14 +3,14 @@
   become: true
   
   vars:
-    app_user: darlan
+    app_user: usuarioapp
 
-    certbot_email: "contato@d34.com.br"
+    certbot_email: "contato@email.com.br"
 
-    domain: "damasio34.com.br"
+    domain: "dominio.com.br"
     subdomains: ["geo", "short"]
 
-    app_internal_host: "127.0.0.1"
+    app_internal_host: "xxx.x.x.x"
     app_internal_port: 8080
     app_port: 8080
 

@@ -105,11 +105,11 @@ ansible-playbook -i digitalocean.yaml playbooks/playbook.yml --limit app-server
 
 ### 4.1. Validação do Ambiente
 
-1 **Acesso SSH:** Conecte-se ao Droplet (pode abrir um console droplet pela DO) como usuário `darlan` usando sua chave SSH:
+1 **Acesso SSH:** Conecte-se ao Droplet (pode abrir um console droplet pela DO) como usuário `usuarioapp` usando sua chave SSH:
   
     ```bash
     # Obtenha o IP via Terraform (se necessário): terraform output -raw app_server_ip
-    ssh -i ~/.ssh/SUA_CHAVE_PRIVADA darlan@IP_DO_DROPLET
+    ssh -i ~/.ssh/SUA_CHAVE_PRIVADA usuarioapp@IP_DO_DROPLET
     ```
 
 2.  **Verificações no Droplet:**
@@ -118,7 +118,7 @@ ansible-playbook -i digitalocean.yaml playbooks/playbook.yml --limit app-server
     * `sudo ufw status` (Deve estar `active` com portas 22, 80, 443 ALLOW).
     * `sudo ls -l /etc/letsencrypt/live/` (Deve mostrar a pasta do certificado para `domain_name_var`).
 
-3.  **Verificação Externa:** Abra um navegador e acesse um dos subdomínios configurados (ex: `https://geo.damasio34.com.br`).
+3.  **Verificação Externa:** Abra um navegador e acesse um dos subdomínios configurados (ex: `https://geo.dominio.com.br`).
     * Você deve ver um **cadeado (conexão segura HTTPS)** e um erro **`502 Bad Gateway`**.
 
 ---
@@ -126,7 +126,7 @@ ansible-playbook -i digitalocean.yaml playbooks/playbook.yml --limit app-server
 ## 5. Deploy de aplicação
 
 ```bash
-ansible-playbook   -i ansible/inventory/tag_env_staging.yml   ansible/playbooks/deploy_app.yml   -e "app_to_deploy=landing-page       full_image_path=registry.digitalocean.com/d34cr/landing-page:latest"
+ansible-playbook   -i ansible/inventory/tag_env_staging.yml   ansible/playbooks/deploy_app.yml   -e "app_to_deploy=landing-page       full_image_path=registry.digitalocean.com/seu-container-registry/landing-page:latest"
 ```
 
 Pipeline `pipeline-deploy-app` faz exatamente esse comando em produção.
