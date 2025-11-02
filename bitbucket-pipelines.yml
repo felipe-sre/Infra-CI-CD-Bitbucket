@@ -39,7 +39,7 @@ definitions:
 
     - step: &apply
         name: Terraform Apply (Staging)
-        trigger: manual 
+        # trigger: manual 
         script:
           - cd cleaners-infra/cleaner-infra-nginx-proxies/terraform
           - export DIGITALOCEAN_TOKEN=$DO_API_TOKEN
