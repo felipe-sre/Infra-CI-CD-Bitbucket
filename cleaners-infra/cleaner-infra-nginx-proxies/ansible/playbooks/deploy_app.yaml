@@ -4,7 +4,6 @@
   become: true
 
   tasks:
-    
     - name: "Garantir que pip3 está instalado"
       ansible.builtin.apt:
         name: python3-pip
@@ -38,12 +37,14 @@
       community.docker.docker_container:
         name: "{{ current_app.name }}"
         state: absent
+        docker_host: unix:///var/run/docker.sock
       ignore_errors: true
 
     - name: "Puxar a nova imagem do registry"
       community.docker.docker_image:
         name: "{{ lookup('env', 'FULL_IMAGE_PATH') }}"
         source: pull
+        docker_host: unix:///var/run/docker.sock
 
     - name: "Rodar o novo contêiner"
       community.docker.docker_container:
@@ -51,5 +52,6 @@
         image: "{{ lookup('env', 'FULL_IMAGE_PATH') }}"
         state: started
         restart_policy: always
+        docker_host: unix:///var/run/docker.sock
         ports:
-          - "{{ current_app.host_port }}:{{ current_app.internal_port }}"   
+          - "{{ current_app.host_port }}:{{ current_app.internal_port }}"
