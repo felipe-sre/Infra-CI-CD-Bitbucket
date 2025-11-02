@@ -4,18 +4,6 @@
   become: true
 
   tasks:
-    - name: "Garantir que pip3 está instalado"
-      ansible.builtin.apt:
-        name: python3-pip
-        state: present
-        update_cache: false
-
-    - name: "Instalar pacote Python 'docker' via pip3"
-      ansible.builtin.pip:
-        name: docker
-        state: present
-        executable: pip3
-
     - name: "Definir dados da aplicação a ser implantada"
       ansible.builtin.set_fact:
         current_app: "{{ apps | selectattr('name', '==', app_to_deploy) | list | first | default({}) }}"
@@ -26,32 +14,25 @@
       when: current_app == {} or current_app.name is not defined
 
     - name: "Login no container registry da DigitalOcean"
-      ansible.builtin.command: |
+      ansible.builtin.shell: |
+        echo "{{ lookup('env', 'DOCKER_PASSWORD') }}" | \
         docker login registry.digitalocean.com \
         --username {{ lookup('env', 'DOCKER_USERNAME') }} \
         --password-stdin
-      args:
-        stdin: "{{ lookup('env', 'DOCKER_PASSWORD') }}" 
+      no_log: true
 
-    - name: "Parar contêiner antigo para liberar a porta"
-      community.docker.docker_container:
-        name: "{{ current_app.name }}"
-        state: absent
-        docker_host: unix:///var/run/docker.sock
+    - name: "Parar e remover contêiner antigo (se existir)"
+      ansible.builtin.command: docker rm -f {{ current_app.name }}
       ignore_errors: true
+      register: stop_result
 
     - name: "Puxar a nova imagem do registry"
-      community.docker.docker_image:
-        name: "{{ lookup('env', 'FULL_IMAGE_PATH') }}"
-        source: pull
-        docker_host: unix:///var/run/docker.sock
+      ansible.builtin.command: docker pull {{ lookup('env', 'FULL_IMAGE_PATH') }}
 
     - name: "Rodar o novo contêiner"
-      community.docker.docker_container:
-        name: "{{ current_app.name }}"
-        image: "{{ lookup('env', 'FULL_IMAGE_PATH') }}"
-        state: started
-        restart_policy: always
-        docker_host: unix:///var/run/docker.sock
-        ports:
-          - "{{ current_app.host_port }}:{{ current_app.internal_port }}"
+      ansible.builtin.command: >
+        docker run -d
+        --name {{ current_app.name }}
+        --restart always
+        -p {{ current_app.host_port }}:{{ current_app.internal_port }}
+        {{ lookup('env', 'FULL_IMAGE_PATH') }}
