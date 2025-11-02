@@ -6,11 +6,11 @@ on:
     inputs:
       domain_name:
         description: 'Nome do Domínio'
-        default: 'damasio34.com.br'
+        default: 'dominio.com.br'
         required: true
       certbot_email:
         description: 'E-mail para Certbot'
-        default: 'contato@d34.com.br'
+        default: 'contato@email.com.br'
         required: true
       app_name:
         description: 'Nome da Aplicação (App)'
@@ -24,7 +24,7 @@ on:
   # Você pode descomentar para rodar em um push para a branch principal
   # push:
   #   branches:
-  #     - 'feat/iac-ci-cd'
+  #     - 'nome-da-branch'
 
 env:
   FULL_IMAGE_PATH: ${{ secrets.DOCKER_REPO }}/${{ github.event.inputs.app_name || 'landing-page' }}:${{ github.event.inputs.image_tag || 'latest' }}
@@ -44,7 +44,7 @@ jobs:
       - name: Terraform Plan (Staging)
         id: plan
         run: |
-          cd cleaners-infra/cleaner-infra-nginx-proxies/terraform
+          cd iacfull/iac-full-nginx-proxies/terraform
           # As variáveis de ambiente (Tokens) são injetadas pelo GitHub Secrets
           export DIGITALOCEAN_TOKEN=${{ secrets.DO_API_TOKEN }}
           export AWS_ACCESS_KEY_ID=${{ secrets.DO_SPACES_ACCESS_KEY }}
@@ -60,12 +60,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan-staging
-          path: cleaners-infra/cleaner-infra-nginx-proxies/terraform/tfplan.out
+          path: iacfull/iac-full-nginx-proxies/terraform/tfplan.out
           
       - name: Terraform Apply (MANUAL)
         if: github.event_name == 'workflow_dispatch' && contains(github.event.inputs.run_apply, 'true') # Condição de execução manual
         run: |
-          cd cleaners-infra/cleaner-infra-nginx-proxies/terraform
+          cd iacfull/iac-full-nginx-proxies/terraform
           export DIGITALOCEAN_TOKEN=${{ secrets.DO_API_TOKEN }}
           export AWS_ACCESS_KEY_ID=${{ secrets.DO_SPACES_ACCESS_KEY }}
           export AWS_SECRET_ACCESS_KEY=${{ secrets.DO_SPACES_SECRET_KEY }}
@@ -94,7 +94,7 @@ jobs:
           python3 -m venv venv
           source venv/bin/activate
           pip install ansible==9.4.0 docker==6.1.3 python-digitalocean
-          ansible-galaxy collection install -r cleaners-infra/cleaner-infra-nginx-proxies/ansible/requirements.yml
+          ansible-galaxy collection install -r iacfull/iac-full-nginx-proxies/ansible/requirements.yml
           
           # 3. Configurar Chave SSH usando GitHub Secrets
           echo "--- Configurando Chave SSH ---"
@@ -104,7 +104,7 @@ jobs:
           
           # 4. Executar Playbook
           export DO_TOKEN=${{ secrets.DO_API_TOKEN }}
-          cd cleaners-infra/cleaner-infra-nginx-proxies/ansible
+          cd iacfull/iac-full-nginx-proxies/ansible
           chmod 755 .
           echo "--- Executando Playbook de Configuração (playbook.yml) ---"
           ansible-playbook \
@@ -135,7 +135,7 @@ jobs:
           python3 -m venv venv
           source venv/bin/activate
           pip install ansible==9.4.0 docker==6.1.3 python-digitalocean
-          ansible-galaxy collection install -r cleaners-infra/cleaner-infra-nginx-proxies/ansible/requirements.yml
+          ansible-galaxy collection install -r iacfull/iac-full-nginx-proxies/ansible/requirements.yml
           
           # 2. Configurar Chave SSH
           echo "--- Configurando Chave SSH ---"
@@ -146,13 +146,13 @@ jobs:
           # 3. Executar o Playbook de Deploy
           export DO_TOKEN=${{ secrets.DO_API_TOKEN }}
           export FULL_IMAGE_PATH=${{ env.FULL_IMAGE_PATH }} # Variável global definida acima
-          cd cleaners-infra/
+          cd iacfull/
           chmod 755 .
           
           echo "--- Executando Playbook de Deploy ---"
           ansible-playbook \
-            cleaner-infra-nginx-proxies/ansible/playbooks/deploy_app.yaml \
-            -i cleaner-infra-nginx-proxies/ansible/digitalocean.yaml \
+            iac-full-nginx-proxies/ansible/playbooks/deploy_app.yaml \
+            -i iac-full-nginx-proxies/ansible/digitalocean.yaml \
             --limit app-server \
             --user root \
             --private-key ~/.ssh/ansible_ssh_key \

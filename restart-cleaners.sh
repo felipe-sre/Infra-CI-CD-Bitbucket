@@ -14,8 +14,8 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Caminhos
-APPS_FILE="cleaners-infra/cleaner-infra-nginx-proxies/apps.yaml"
-ANSIBLE_DIR="cleaners-infra/cleaner-infra-nginx-proxies/ansible"
+APPS_FILE="iacfull/iac-full-nginx-proxies/apps.yaml"
+ANSIBLE_DIR="iacfull/iac-full-nginx-proxies/ansible"
 INVENTORY="$ANSIBLE_DIR/digitalocean.yaml"
 PLAYBOOK="$ANSIBLE_DIR/playbooks/deploy_app.yaml"
 

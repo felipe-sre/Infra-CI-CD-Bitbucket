@@ -39,7 +39,7 @@ cat ~/.ssh/sua_chave_privada | base64 -w 0
 
 ### 2. Configurar Apps
 
-Edite `cleaners-infra/cleaner-infra-nginx-proxies/apps.yaml`:
+Edite `iacfull/iac-full-nginx-proxies/apps.yaml`:
 
 ```yaml
 apps:
@@ -213,7 +213,7 @@ docker logs nome-da-app
 docker ps -a
 
 # Tentar rodar manualmente
-docker run -p 8080:80 registry.digitalocean.com/d34cr/landing-page:latest
+docker run -p 8080:80 registry.digitalocean.com/seu-container-registry/landing-page:latest
 ```
 
 ---
